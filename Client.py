@@ -138,7 +138,7 @@ class Client:
 		try:
 			self.rtspSocket.connect((self.serverAddr, self.serverPort))
 		except:
-			tkMessageBox.showwarning('Connection Failed', 'Connection to \'%s\' failed.' %self.serverAddr)
+			tkinter.messagebox.showwarning('Connection Failed', 'Connection to \'%s\' failed.' %self.serverAddr)
 	
 	def sendRtspRequest(self, requestCode):
 		"""Send RTSP request to the server."""	
@@ -153,7 +153,7 @@ class Client:
 			self.rtspSeq+=1
 			
 			# Write the RTSP request to be sent.
-			request = "SETUP " + str(self.fileName) + " RTSP/1.0"
+			request = "SETUP " + str(fileName) + " RTSP/1.0"
 			request+="\nCSeq: %d" % self.rtspSeq
 			request+="\nTransport: RTP/UDP; client_port = " + str(self.rtpPort)
 
@@ -202,7 +202,7 @@ class Client:
 			return
 		
 		# Send the RTSP request using rtspSocket.
-		self.rtspSocket.send(request)
+		self.rtspSocket.send(request.encode())
 		
 		print('\nData sent:\n' + request)
 	
@@ -273,12 +273,12 @@ class Client:
 			self.state=self.READY
 			self.rtpSocket.bind(('',self.rtpPort))
 		except:
-			tkMessageBox.showwarning('Unable to Bind', 'Unable to bind PORT=%d' %self.rtpPort)
+			tkinter.messagebox.showwarning('Unable to Bind', 'Unable to bind PORT=%d' %self.rtpPort)
 
 	def handler(self):
 		"""Handler on explicitly closing the GUI window."""
 		self.pauseMovie()
-		if tkMessageBox.askokcancel("Quit?", "Are you sure you want to quit?"):
+		if tkinter.messagebox.askokcancel("Quit?", "Are you sure you want to quit?"):
 			self.exitClient()
 		else: # When the user presses cancel, resume playing.
 			self.playMovie()
